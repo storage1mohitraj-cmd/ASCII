@@ -1,8 +1,8 @@
 package frames
 
 import (
-	"strings"
-	"time"
+    "fmt"
+    "time"
 )
 
 var Gina = FrameType{
@@ -21,35 +21,23 @@ var Gina = FrameType{
 		}
 		amp := 12
 		t := i % (2 * amp)
-		off := amp - abs(amp-t)
-		return shift(gina[idx], off)
+        off := amp - abs(amp-t)
+        return fmt.Sprintf("\x1b[%dC%s", off, gina[idx])
 	},
 	GetLength: func() int { return len(gina) },
 	GetSleep:  func() time.Duration { return time.Millisecond * 70 },
 }
 
-func shift(s string, n int) string {
-	if n <= 0 {
-		return s
-	}
-	pad := strings.Repeat(" ", n)
-	lines := strings.Split(s, "\n")
-	for i := range lines {
-		lines[i] = pad + lines[i]
-	}
-	return strings.Join(lines, "\n")
-}
-
 func abs(n int) int {
-	if n < 0 {
-		return -n
-	}
-	return n
+    if n < 0 {
+        return -n
+    }
+    return n
 }
 
 var gina = []string{
 	`	
-	-----:----------------=-----------------------==----------==:=-------------------------------=-:.
+-----:----------------=-----------------------==----------==:=-------------------------------=-:.
 -:---:----------------------------------------+-------------:+---------------------------------..
 ----------------------------------------------==-------------==--------------------------------..
 -+--------------------=-----------=*+---------==----------=--=+----=--------------=-----------::.
