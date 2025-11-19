@@ -1,10 +1,54 @@
 package frames
 
-// This is the value stored in the FrameMap
-var Gina = DefaultFrameType(gina)
+import (
+	"strings"
+	"time"
+)
+
+var Gina = FrameType{
+	GetFrame: func(i int) string {
+		n := len(gina)
+		if n == 0 {
+			return ""
+		}
+		m := (n - 1) * 2
+		k := i % m
+		var idx int
+		if k < n {
+			idx = k
+		} else {
+			idx = m - k
+		}
+		amp := 12
+		t := i % (2 * amp)
+		off := amp - abs(amp-t)
+		return shift(gina[idx], off)
+	},
+	GetLength: func() int { return len(gina) },
+	GetSleep:  func() time.Duration { return time.Millisecond * 70 },
+}
+
+func shift(s string, n int) string {
+	if n <= 0 {
+		return s
+	}
+	pad := strings.Repeat(" ", n)
+	lines := strings.Split(s, "\n")
+	for i := range lines {
+		lines[i] = pad + lines[i]
+	}
+	return strings.Join(lines, "\n")
+}
+
+func abs(n int) int {
+	if n < 0 {
+		return -n
+	}
+	return n
+}
 
 var gina = []string{
-`	
+	`	
 	-----:----------------=-----------------------==----------==:=-------------------------------=-:.
 -:---:----------------------------------------+-------------:+---------------------------------..
 ----------------------------------------------==-------------==--------------------------------..
