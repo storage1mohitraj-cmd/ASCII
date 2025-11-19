@@ -1,9 +1,9 @@
 package frames
 
 // This is the value stored in the FrameMap
-var AStrend = DefaultFrameType(as)
+var Gina = DefaultFrameType(gina)
 
-var as = []string{
+var gina = []string{
 `	
 	-----:----------------=-----------------------==----------==:=-------------------------------=-:.
 -:---:----------------------------------------+-------------:+---------------------------------..
