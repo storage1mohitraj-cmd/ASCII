@@ -2,35 +2,36 @@ package frames
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
 var Gina = FrameType{
-    GetFrame: func(i int) string {
-        n := len(gina)
-        if n == 0 {
-            return ""
-        }
-        if n == 1 {
-            amp := 12
-            t := i % (2 * amp)
-            off := amp - abs(amp-t)
-            return fmt.Sprintf("\x1b[%dC%s", off, gina[0])
-        }
-        m := (n - 1) * 2
-        k := i % m
-        var idx int
-        if k < n {
-            idx = k
+	GetFrame: func(i int) string {
+		n := len(ginaFrames)
+		if n == 0 {
+			return ""
+		}
+		if n == 1 {
+			amp := 12
+			t := i % (2 * amp)
+			off := amp - abs(amp-t)
+			return fmt.Sprintf("\x1b[%dC%s", off, ginaFrames[0])
+		}
+		m := (n - 1) * 2
+		k := i % m
+		var idx int
+		if k < n {
+			idx = k
 		} else {
 			idx = m - k
 		}
 		amp := 12
 		t := i % (2 * amp)
 		off := amp - abs(amp-t)
-		return fmt.Sprintf("\x1b[%dC%s", off, gina[idx])
+		return fmt.Sprintf("\x1b[%dC%s", off, ginaFrames[idx])
 	},
-	GetLength: func() int { return len(gina) },
+	GetLength: func() int { return len(ginaFrames) },
 	GetSleep:  func() time.Duration { return time.Millisecond * 70 },
 }
 
@@ -40,6 +41,13 @@ func abs(n int) int {
 	}
 	return n
 }
+
+var ginaFrames = func() []string {
+	if len(gina) == 1 {
+		return strings.Split(gina[0], "\n")
+	}
+	return gina
+}()
 
 var gina = []string{
 	`	
