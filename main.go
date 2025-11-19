@@ -1,12 +1,13 @@
 package main
 
 import (
-	"encoding/json"
-	"flag"
-	"fmt"
-	"net/http"
-	"strings"
-	"time"
+    "encoding/json"
+    "flag"
+    "fmt"
+    "net/http"
+    "os"
+    "strings"
+    "time"
 
 	"github.com/hugomd/ascii-live/frames"
 
@@ -105,23 +106,28 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 // Server.
 func main() {
-	flag.Parse()
-	// Don't write to /tmp - doesn't work in docker scratch
-	flag.Set("logtostderr", "true")
+    flag.Parse()
+    // Don't write to /tmp - doesn't work in docker scratch
+    flag.Set("logtostderr", "true")
 
-	r := mux.NewRouter()
-	r.HandleFunc("/list", listHandler).Methods("GET")
-	r.HandleFunc("/{frameSource}", handler).Methods("GET")
-	r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
+    r := mux.NewRouter()
+    r.HandleFunc("/list", listHandler).Methods("GET")
+    r.HandleFunc("/{frameSource}", handler).Methods("GET")
+    r.NotFoundHandler = http.HandlerFunc(notFoundHandler)
 
-	srv := &http.Server{
-		Handler: r,
-		Addr:    ":8080",
-		// Set unlimited read/write timeouts
-		ReadTimeout:  0,
-		WriteTimeout: 0,
-	}
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
 
-	glog.Infof("Serving...")
-	glog.Fatal(srv.ListenAndServe())
+    srv := &http.Server{
+        Handler: r,
+        Addr:    ":" + port,
+        // Set unlimited read/write timeouts
+        ReadTimeout:  0,
+        WriteTimeout: 0,
+    }
+
+    glog.Infof("Serving...")
+    glog.Fatal(srv.ListenAndServe())
 }
