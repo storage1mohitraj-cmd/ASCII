@@ -6,16 +6,22 @@ import (
 )
 
 var Gina = FrameType{
-	GetFrame: func(i int) string {
-		n := len(gina)
-		if n == 0 {
-			return ""
-		}
-		m := (n - 1) * 2
-		k := i % m
-		var idx int
-		if k < n {
-			idx = k
+    GetFrame: func(i int) string {
+        n := len(gina)
+        if n == 0 {
+            return ""
+        }
+        if n == 1 {
+            amp := 12
+            t := i % (2 * amp)
+            off := amp - abs(amp-t)
+            return fmt.Sprintf("\x1b[%dC%s", off, gina[0])
+        }
+        m := (n - 1) * 2
+        k := i % m
+        var idx int
+        if k < n {
+            idx = k
 		} else {
 			idx = m - k
 		}
