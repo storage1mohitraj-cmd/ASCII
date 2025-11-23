@@ -16,7 +16,7 @@ import (
 )
 
 var NotFoundMessage = map[string]string{
-	"error": ""You almost ruined a good surprise. Come on, curl it in terminal."",
+	"error": "You almost ruined a good surprise. Come on, curl it in terminal.",
 }
 
 var NotCurledMessage = map[string]string{
